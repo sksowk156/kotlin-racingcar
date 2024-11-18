@@ -7,8 +7,8 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 
 class CalculatorTest {
-    private val expressionValidator = ExpressionValidator()
-    private val calculator = Calculator(expressionValidator)
+    private val expressionParser = ExpressionParser()
+    private val calculator = Calculator(expressionParser)
 
     @ParameterizedTest(name = "입력: ''{0}'' => 예상 결과: ''{1}''")
     @CsvSource(
