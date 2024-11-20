@@ -1,11 +1,11 @@
 package step3
 
-import step3.feature.CarRacingGameView
+import step3.feature.CarRacingGame
 
 fun main() {
-    val carRacingGame = CarRacingGameView()
+    val carRacingGame = CarRacingGame()
     try {
-        carRacingGame()
+        carRacingGame.start()
     } catch (e: IllegalArgumentException) {
         println("오류: ${e.message}")
     }
