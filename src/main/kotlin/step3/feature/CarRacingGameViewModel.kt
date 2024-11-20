@@ -1,19 +1,23 @@
 package step3.feature
 
-import step3.core.domain.CarUpdateChecker
-import step3.core.model.CarRacingState
+import step3.core.domain.GetCurrentTotalDistance
+import step3.core.model.Car
+import step3.core.model.GameState
 import step3.core.util.NumberGeneratorImpl
+import step3.core.util.StringConverter
+import step3.core.util.StringConverterImpl
 
 class CarRacingGameViewModel(
-    private val carUpdateChecker: CarUpdateChecker = CarUpdateChecker(NumberGeneratorImpl()),
+    private val getCurrentTotalDistance: GetCurrentTotalDistance = GetCurrentTotalDistance(NumberGeneratorImpl()),
+    private val stringConverter: StringConverter = StringConverterImpl(),
 ) {
-    private var _state = CarRacingState()
-    val state: CarRacingState get() = _state
+    private var _state = GameState()
+    val state: GameState get() = _state
 
-    fun processIntent(intent: CarRacingIntent) {
+    fun processIntent(intent: GameIntent) {
         when (intent) {
-            is CarRacingIntent.InitializeGame -> initializeCars(intent.carCountInput, intent.attemptCount)
-            CarRacingIntent.PerformAttempt -> performAttempt()
+            is GameIntent.InitializeGame -> initializeCars(intent.carCountInput, intent.attemptCount)
+            GameIntent.PerformAttempt -> performAttempt()
         }
     }
 
@@ -21,26 +25,21 @@ class CarRacingGameViewModel(
         carCountInput: String,
         attemptCountInput: String,
     ) {
-        val carCount =
-            carCountInput.toIntOrNull()
-                ?: throw IllegalArgumentException("유효한 숫자를 입력해주세요.")
-
-        val attemptCount =
-            attemptCountInput.toIntOrNull()
-                ?: throw IllegalArgumentException("유효한 숫자를 입력해주세요.")
+        val carCount = stringConverter.convertToInt(carCountInput)
+        val attemptCount = stringConverter.convertToInt(attemptCountInput)
 
         _state =
             _state
                 .copy(
-                    cars = List(carCount) { "" },
+                    cars = List(carCount) { Car() },
                     attemptCount = attemptCount,
                 )
     }
 
     private fun performAttempt() {
         val updatedCars =
-            _state.cars.map {
-                if (carUpdateChecker()) "$it-" else it
+            _state.cars.map { car ->
+                Car(totalDistance = getCurrentTotalDistance(car))
             }
         _state = _state.copy(cars = updatedCars)
     }
