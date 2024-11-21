@@ -1,10 +1,10 @@
 package step3.feature
 
-sealed class CarRacingIntent {
+sealed class GameIntent {
     data class InitializeGame(
         val carCountInput: String,
         val attemptCount: String,
-    ) : CarRacingIntent()
+    ) : GameIntent()
 
-    data object PerformAttempt : CarRacingIntent()
+    data object PerformAttempt : GameIntent()
 }
