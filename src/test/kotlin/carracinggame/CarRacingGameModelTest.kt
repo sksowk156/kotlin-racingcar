@@ -1,6 +1,6 @@
 package carracinggame
 
-import carracinggame.core.domain.CarMovementChecker
+import carracinggame.core.domain.DetermineCarMovementUseCase
 import carracinggame.feature.CarRacingGameViewModel
 import carracinggame.feature.GameIntent
 import org.assertj.core.api.Assertions.assertThat
@@ -11,11 +11,11 @@ class CarRacingGameModelTest {
     @Test
     fun `InitializeGame Intent를 처리하면 상태가 올바르게 초기화된다`() {
         val viewModel =
-            CarRacingGameViewModel(CarMovementChecker(TestNumberGeneratorImpl(listOf(3, 3, 3, 3, 3, 3))))
+            CarRacingGameViewModel(DetermineCarMovementUseCase(TestNumberGeneratorImpl(listOf(3, 3, 3, 3, 3, 3))))
 
         val carCountInput = "2"
         val attemptCountInput = "3"
-        val intent = GameIntent.InitializeGame(carCountInput, attemptCountInput)
+        val intent = GameIntent.InitializeGameState(carCountInput, attemptCountInput)
 
         viewModel.processIntent(intent)
 
@@ -27,11 +27,11 @@ class CarRacingGameModelTest {
     @Test
     fun `PerformAttempt Intent를 처리하면 자동차 상태가 업데이트된다`() {
         val viewModel =
-            CarRacingGameViewModel(CarMovementChecker(TestNumberGeneratorImpl(listOf(3, 5, 3, 5, 3, 5))))
+            CarRacingGameViewModel(DetermineCarMovementUseCase(TestNumberGeneratorImpl(listOf(3, 5, 3, 5, 3, 5))))
 
         val carCountInput = "2"
         val attemptCountInput = "3"
-        val initializeIntent = GameIntent.InitializeGame(carCountInput, attemptCountInput)
+        val initializeIntent = GameIntent.InitializeGameState(carCountInput, attemptCountInput)
         viewModel.processIntent(initializeIntent)
 
         viewModel.processIntent(GameIntent.UpdateCarState)
@@ -50,11 +50,11 @@ class CarRacingGameModelTest {
     @Test
     fun `잘못된 carCountInput으로 InitializeGame Intent를 처리하면 예외가 발생한다`() {
         val viewModel =
-            CarRacingGameViewModel(CarMovementChecker(TestNumberGeneratorImpl(listOf(0))))
+            CarRacingGameViewModel(DetermineCarMovementUseCase(TestNumberGeneratorImpl(listOf(0))))
 
         val carCountInput = "invalid"
         val attemptCountInput = "5"
-        val intent = GameIntent.InitializeGame(carCountInput, attemptCountInput)
+        val intent = GameIntent.InitializeGameState(carCountInput, attemptCountInput)
 
         assertThatThrownBy { viewModel.processIntent(intent) }
             .isInstanceOf(IllegalArgumentException::class.java)
@@ -64,11 +64,11 @@ class CarRacingGameModelTest {
     @Test
     fun `잘못된 attemptCountInput으로 InitializeGame Intent를 처리하면 예외가 발생한다`() {
         val viewModel =
-            CarRacingGameViewModel(CarMovementChecker(TestNumberGeneratorImpl(listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))))
+            CarRacingGameViewModel(DetermineCarMovementUseCase(TestNumberGeneratorImpl(listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))))
 
         val carCountInput = "3"
         val attemptCountInput = "invalid"
-        val intent = GameIntent.InitializeGame(carCountInput, attemptCountInput)
+        val intent = GameIntent.InitializeGameState(carCountInput, attemptCountInput)
 
         assertThatThrownBy { viewModel.processIntent(intent) }
             .isInstanceOf(IllegalArgumentException::class.java)

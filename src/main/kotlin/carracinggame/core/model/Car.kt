@@ -1,7 +1,7 @@
 package carracinggame.core.model
 
 data class Car(
-    val id: Int,
+    val name: String,
 ) {
     var totalDistance: Int = 0
         private set
