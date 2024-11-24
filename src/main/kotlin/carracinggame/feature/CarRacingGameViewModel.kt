@@ -11,7 +11,7 @@ import carracinggame.core.util.StringParserImpl
 class CarRacingGameViewModel(
     private val determineCarMovementUseCase: DetermineCarMovementUseCase =
         DetermineCarMovementUseCase(NumberGeneratorImpl()),
-    private val findWinnersUseCase: FindWinnersUseCase,
+    private val findWinnersUseCase: FindWinnersUseCase = FindWinnersUseCase(),
     private val stringParser: StringParser = StringParserImpl(),
 ) {
     private var _state = GameState()
@@ -31,6 +31,12 @@ class CarRacingGameViewModel(
     ) {
         val carNames = stringParser.splitByComma(carNamesInput)
         val attemptCount = stringParser.convertToInt(attemptCountInput)
+
+        carNames.forEach { name ->
+            if (name.length > 5) {
+                throw IllegalArgumentException("자동차 이름은 5자를 초과할 수 없습니다.")
+            }
+        }
 
         _state =
             _state
