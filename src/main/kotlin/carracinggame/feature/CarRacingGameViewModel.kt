@@ -17,7 +17,7 @@ class CarRacingGameViewModel(
     fun processIntent(intent: GameIntent) {
         when (intent) {
             is GameIntent.InitializeGame -> initializeCars(intent.carCountInput, intent.attemptCount)
-            GameIntent.UpdateCarState -> performAttempt()
+            GameIntent.UpdateCarState -> updateCarState()
         }
     }
 
@@ -36,7 +36,7 @@ class CarRacingGameViewModel(
                 )
     }
 
-    private fun performAttempt() {
+    private fun updateCarState() {
         val updatedCars =
             _state.cars.map { car ->
                 if (carMovementChecker.shouldMove()) car.move()
