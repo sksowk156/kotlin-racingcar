@@ -1,14 +1,14 @@
-package step3.feature
+package carracinggame.feature
 
-import step3.core.domain.GetCurrentTotalDistance
-import step3.core.model.Car
-import step3.core.model.GameState
-import step3.core.util.NumberGeneratorImpl
-import step3.core.util.StringConverter
-import step3.core.util.StringConverterImpl
+import carracinggame.core.domain.CarMovementChecker
+import carracinggame.core.model.Car
+import carracinggame.core.model.GameState
+import carracinggame.core.util.NumberGeneratorImpl
+import carracinggame.core.util.StringConverter
+import carracinggame.core.util.StringConverterImpl
 
 class CarRacingGameViewModel(
-    private val getCurrentTotalDistance: GetCurrentTotalDistance = GetCurrentTotalDistance(NumberGeneratorImpl()),
+    private val carMovementChecker: CarMovementChecker = CarMovementChecker(NumberGeneratorImpl()),
     private val stringConverter: StringConverter = StringConverterImpl(),
 ) {
     private var _state = GameState()
@@ -17,7 +17,7 @@ class CarRacingGameViewModel(
     fun processIntent(intent: GameIntent) {
         when (intent) {
             is GameIntent.InitializeGame -> initializeCars(intent.carCountInput, intent.attemptCount)
-            GameIntent.PerformAttempt -> performAttempt()
+            GameIntent.UpdateCarState -> performAttempt()
         }
     }
 
@@ -31,7 +31,7 @@ class CarRacingGameViewModel(
         _state =
             _state
                 .copy(
-                    cars = List(carCount) { Car() },
+                    cars = List(carCount) { idx -> Car(idx) },
                     attemptCount = attemptCount,
                 )
     }
@@ -39,7 +39,8 @@ class CarRacingGameViewModel(
     private fun performAttempt() {
         val updatedCars =
             _state.cars.map { car ->
-                Car(totalDistance = getCurrentTotalDistance(car))
+                if (carMovementChecker.shouldMove()) car.move()
+                car
             }
         _state = _state.copy(cars = updatedCars)
     }

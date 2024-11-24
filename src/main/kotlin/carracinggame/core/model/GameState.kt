@@ -1,4 +1,4 @@
-package step3.core.model
+package carracinggame.core.model
 
 data class GameState(
     val cars: List<Car> = emptyList(),

@@ -1,4 +1,4 @@
-package step3.core.util
+package carracinggame.core.util
 
 interface StringConverter {
     fun convertToInt(input: String): Int

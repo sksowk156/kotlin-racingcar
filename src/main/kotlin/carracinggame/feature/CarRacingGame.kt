@@ -1,7 +1,7 @@
-package step3.feature
+package carracinggame.feature
 
-import step3.core.ui.InputView
-import step3.core.ui.ResultView
+import carracinggame.core.ui.InputView
+import carracinggame.core.ui.ResultView
 
 class CarRacingGame(
     private val viewModel: CarRacingGameViewModel = CarRacingGameViewModel(),
@@ -16,13 +16,13 @@ class CarRacingGame(
                     GameIntent.InitializeGame(carCountInput, attemptCount),
                 )
             },
-            updateGameState = { viewModel.processIntent(GameIntent.PerformAttempt) },
+            updateCarState = { viewModel.processIntent(GameIntent.UpdateCarState) },
         )
     }
 
     private fun progressGame(
         initializeGameState: (String, String) -> Unit,
-        updateGameState: () -> Unit,
+        updateCarState: () -> Unit,
     ) {
         val carCount = carCountView.getInputMessage()
         val attemptCount = attemptCountView.getInputMessage()
@@ -33,9 +33,10 @@ class CarRacingGame(
         ResultView(RESULT).render()
         repeat(viewModel.state.attemptCount) {
             // 게임 상태 업데이트
-            updateGameState()
-            viewModel.state.cars.forEach {
-                ResultView(it.totalDistance).render()
+            updateCarState()
+            viewModel.state.cars.forEach { car ->
+                val currentDistance = "-".repeat(car.totalDistance)
+                ResultView(currentDistance).render()
             }
             ResultView("").render()
         }
