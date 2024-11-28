@@ -28,6 +28,5 @@ class CarRacingGameController(
         cars.forEach { it.updateCurrentDistance(determineCarMovementUseCase) }
     }
 
-    fun formatWinnerNames(): String =
-        StringParser.combineByComma(cars.findWinners().map { it.name })
+    fun formatWinnerNames(): String = StringParser.combineByComma(cars.findWinners().map { it.name })
 }
