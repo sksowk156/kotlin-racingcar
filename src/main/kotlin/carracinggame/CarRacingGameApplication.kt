@@ -1,6 +1,6 @@
-package step3
+package carracinggame
 
-import step3.feature.CarRacingGame
+import carracinggame.feature.CarRacingGame
 
 fun main() {
     val carRacingGame = CarRacingGame()

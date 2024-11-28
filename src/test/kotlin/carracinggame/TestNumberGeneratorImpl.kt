@@ -1,6 +1,6 @@
-package step3
+package carracinggame
 
-import step3.core.util.NumberGenerator
+import carracinggame.core.util.NumberGenerator
 
 class TestNumberGeneratorImpl(private val numbers: List<Int>) : NumberGenerator {
     private var index = 0

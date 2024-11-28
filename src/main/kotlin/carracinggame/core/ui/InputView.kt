@@ -1,4 +1,4 @@
-package step3.core.ui
+package carracinggame.core.ui
 
 class InputView(private val requestMessage: String) {
     fun getInputMessage(): String {
